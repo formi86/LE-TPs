@@ -13,6 +13,8 @@ int main(){
             menor++;
         }
     }
-    printf("Mayores a 0: %d\nMenores a 0: %d", mayor, menor);
+    printf("Mayores a 0: %d\nMenores a 0: %d\n", mayor, menor);
+    printf("Press any key to continue...");  
+    getch();
     return 0;
 }

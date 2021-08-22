@@ -11,5 +11,7 @@ int main(){
     scanf("%f", &base);
     area = (height * base) / 2;
     printf("El area del triangulo es de:%f\n", area);
+    printf("Press any key to continue...");  
+    getch();
     return 0;
 }

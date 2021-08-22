@@ -9,7 +9,9 @@ int main(){
     } else if (num > 0) {
         printf("El numero es positivo\n");
     } else {
-        printf("El numero es 0\n");
+        printf("El numero es 0");
     }
+    printf("Press any key to continue...");  
+    getch();
     return 0;
 }

@@ -9,6 +9,9 @@ int main(){
         scanf("%f", &numero);
         suma += numero;
     }
-    media = suma / 5
-    printf("La suma de los numeros es: %f\n La media de los numeros es: %f", suma, media);
+    media = suma / 5;
+    printf("La suma de los numeros es: %f\n La media de los numeros es: %f\n", suma, media);
+    printf("Press any key to continue...");  
+    getch();    
+    return 0;
 }

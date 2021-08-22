@@ -8,5 +8,7 @@ int main(){
     } while (numero < 0);
     numero *= numero ;
     printf("El cuadrado del numero introducido es: %f\n", numero);
+    printf("Press any key to continue...");  
+    getch();
     return 0;
 }

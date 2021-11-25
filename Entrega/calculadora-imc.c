@@ -53,7 +53,7 @@ float calcIMC(float peso, float altura) {
 int main() {
 
     uploadValues();
-    if (checkValues(data1.dni, data1.email)) printf("------- \n\nNombre: %s\nApellido: %s\nDNI: %d\nE-Mail: %s\nTelefono: %d\nIMC: %f \n", data1.nombre, data1.apellido, data1.dni, data1.email, data1.telefono, calcIMC(data1.peso, data1.altura));
+    if (checkValues(data1.dni, data1.email)) printf("------- \n\nNombre: %s\nApellido: %s\nDNI: %d\nE-Mail: %s\nTelefono: %d\nIMC: %f \n\n------- \n", data1.nombre, data1.apellido, data1.dni, data1.email, data1.telefono, calcIMC(data1.peso, data1.altura));
     else printf("El email debe contener \"@\" y \".com\" o \".com.ar\" \n");
 
     printf("Press any key to continue...");  

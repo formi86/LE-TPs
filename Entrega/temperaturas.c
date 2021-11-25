@@ -17,9 +17,8 @@ int main() {
         if (tmp > 10 && tmp < 20) tmp_between++;
         sum += tmp;
         i++;
-        printf("Continuar? 1: Si, 0:No \n");
-        scanf("%d", &cont);
-    } while (cont);
+        printf("Continuar? y/n \n");
+    } while (getch() != 'n');
 
     avg = sum/i;
 

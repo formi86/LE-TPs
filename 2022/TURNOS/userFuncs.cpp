@@ -45,22 +45,60 @@ int checkUser(int dni, string name, string surname) {
     ifstream DB;
     DB.open("users_db.txt");
     int j = 0;
-    while(!DB.eof()) {
-        string line;
-        getline(DB, line);
-        if(line == to_string(dni) || ( line == name && line == surname) ) j++;
+    if(DB) {
+        while(!DB.eof() && j == 0) {
+            string line;
+            getline(DB, line);
+            if(line == to_string(dni)) j++;
+            if(line == name) {
+                getline(DB, line);
+                if(line == surname) j++;
+            };
+        }
     }
     return j;
-}
+};
+
+int checkPsw(int dni, string psw) {
+    int j = 0, n = 0;
+    ifstream DB;
+    DB.open("users_db.txt");
+    if(DB) {
+        while(!DB.eof() || j > 0) {
+            string line;
+            getline(DB, line);
+            if(line == to_string(dni)) {
+                cout << endl << line << endl;
+                for (int i = 0; i < 6; i++) {
+                    getline(DB, line);
+                    cout << line << endl;
+                    if(i == 5 && line == psw) n = 1;
+                    else if (i == 5 && line != psw) n = 0;
+                }
+            }
+        }
+    }
+    return n;
+};
 
 void logIn(void) {
-    cout << "hola";
+    int tmpDni;
+    string tmpPsw;
+    cout << endl << "Ingrese su DNI: ";
+    cin >> tmpDni;
+    cout << endl << "Ingrese su contraseña";
+    cin >> tmpPsw;
+    if(checkPsw(tmpDni, tmpPsw)){
+        cout << "LOGEADO";
+    } else {
+        cout << "MAL AHI BRO";
+    }
 };
 
 int signUp(void) {
     int state = NAME, option = 0;
     string tmpName, tmpSur, tmpPsw;
-    int tmpAge, tmpLic, tmpType, tmpDni;
+    int tmpAge, tmpLic = 0, tmpType, tmpDni;
     while(state != OUT) {
         switch (state) {
             case NAME:
@@ -75,7 +113,7 @@ int signUp(void) {
                     system("CLS");
                     cout << endl << "El nombre y apellido o dni se encuentra repetido" << endl;
                     state = NAME;
-                 }
+                }
                 else state = AGE;
 
                 break;
@@ -105,6 +143,8 @@ int signUp(void) {
                     state = PSW;
                 } else if (tmpType == INSTRUCTOR || tmpType == PILOTO) {
                     state = LIC;
+                } else {
+                    state = TYPE;
                 }
                 break;
 

@@ -2,9 +2,9 @@
 #include <fstream>
 #include <windows.h>
 #include <string.h>
-#include "macros.cpp"
-#include "prototypes.cpp"
-#include "utils.cpp"
+#include "./utils/macros.cpp"
+#include "./utils/prototypes.cpp"
+#include "./utils/utils.cpp"
 class user {
     public:
         int dni;
@@ -14,9 +14,21 @@ class user {
         int type;
         int lic;
         string psw;
+        user();
         user(int d, string n, string s, int a, int t, int l, string p);
         void save(void);
+        void del(void);
 };
+
+user::user() {
+    dni = 0;
+    name = "";
+    surname = "";
+    age = 0;
+    type = 0;
+    lic = 0;
+    psw = "";
+}
 
 user::user(int d, string n, string s, int a, int t, int l, string p) {
     dni = d;
@@ -41,12 +53,38 @@ void user::save(void) {
     DB.close();
 };
 
-int checkUser(int dni, string name, string surname) {
+void user::del(void) {
+    int firstLine = checkPsw(dni, psw);
+    if (firstLine != -1) {
+        string line;
+        int i = 0;
+        rename("users_db.txt", "old_users_db.txt");
+        ifstream oldDB;
+        oldDB.open("old_users_db.txt");
+        ofstream DB;
+        DB.open("users_db.txt");
+        while(!oldDB.eof()) {
+            getline(oldDB, line);
+            if (i < firstLine || i > firstLine + 7) DB << line << endl;
+            i++;
+        }
+        DB.close();
+        oldDB.close();
+        remove("old_users_db.txt");
+
+        cout << endl << "Usuario eliminado" << endl << "======================" << endl << endl;
+    } else {
+        cout << endl << "Usuario no encontrado"<< endl << "======================" << endl << endl;
+    }
+
+}
+
+int checkUser(int dni, string name, string surname) { //Check if user already exists, returns > 0 if so
     ifstream DB;
     DB.open("users_db.txt");
     int j = 0;
     if(DB) {
-        while(!DB.eof() && j == 0) {
+        while(!DB.eof()) {
             string line;
             getline(DB, line);
             if(line == to_string(dni)) j++;
@@ -59,40 +97,66 @@ int checkUser(int dni, string name, string surname) {
     return j;
 };
 
-int checkPsw(int dni, string psw) {
-    int j = 0, n = 0;
+int checkPsw(int dni, string psw) { //Check user password for login, returns line of the dni in the file
+    int out = -1, n = 0;
     ifstream DB;
     DB.open("users_db.txt");
     if(DB) {
-        while(!DB.eof() || j > 0) {
+        while(!DB.eof()) {
             string line;
             getline(DB, line);
             if(line == to_string(dni)) {
-                cout << endl << line << endl;
                 for (int i = 0; i < 6; i++) {
                     getline(DB, line);
-                    cout << line << endl;
-                    if(i == 5 && line == psw) n = 1;
-                    else if (i == 5 && line != psw) n = 0;
+                    if(i == 5 && line == psw) out = n;
+                    else if (i == 5 && line != psw) out = -1;
                 }
+            }
+            n++;
+        }
+    }
+    return out;
+};
+
+user searchUser(int firstLine) { //Search user data by first line, returns user object
+    string line, properties[7];
+    ifstream DB;
+    DB.open("users_db.txt");
+    for (int i = 0; i <= firstLine; i++)
+    {
+        getline(DB, line);
+        if (i == firstLine) {
+            properties[0] = line;
+            for (int j = 0; j < 6; j++) {
+                getline(DB, line);
+                properties[j+1] = line;
             }
         }
     }
-    return n;
+    user tmpUser(stoi(properties[0]), properties[1], properties[2], stoi(properties[3]), stoi(properties[4]), stoi(properties[5]), properties[6]);
+    DB.close();
+    return tmpUser;
 };
 
-void logIn(void) {
-    int tmpDni;
+user logIn(void) {
+    int tmpDni, firstLine;
     string tmpPsw;
+    user actualUser;
+
     cout << endl << "Ingrese su DNI: ";
     cin >> tmpDni;
-    cout << endl << "Ingrese su contraseña";
+    cout << endl << "Ingrese su contraseña: ";
     cin >> tmpPsw;
-    if(checkPsw(tmpDni, tmpPsw)){
-        cout << "LOGEADO";
+    firstLine = checkPsw(tmpDni, tmpPsw);
+    if(firstLine != -1) {
+        actualUser = searchUser(firstLine);
+        system("CLS");
+        cout << endl << "Has iniciado sesion como: " << actualUser.name << " " << actualUser.surname  << endl << "======================" << endl << endl;
     } else {
-        cout << "MAL AHI BRO";
+        system("CLS");
+        cout << endl << "Las credenciales no coinciden"  << endl << "======================" << endl << endl;
     }
+    return actualUser;
 };
 
 int signUp(void) {
@@ -111,7 +175,7 @@ int signUp(void) {
                 if (checkUser(tmpDni, tmpName, tmpSur) > 0)
                 {
                     system("CLS");
-                    cout << endl << "El nombre y apellido o dni se encuentra repetido" << endl;
+                    cout << endl << "El nombre y apellido o dni se encuentra repetido"  << endl << "======================" << endl << endl;
                     state = NAME;
                 }
                 else state = AGE;
@@ -124,14 +188,14 @@ int signUp(void) {
                 if (tmpAge < 17) {
                     cout << endl << "Es menor de edad, no puede registrarse. Se cerrara la sesion en 3 segundos." << endl;
                     delay(3);
-                    option = 3;
+                    option = OUT_OPTION;
                     state = OUT;
                 } else if (tmpAge >= 17 && tmpAge <= 100) {
                     state = TYPE;
                 } else {
                     cout << endl << "Estas medio viejo para volar, se cerrara la sesion en 3 segundos.";
                     delay(3);
-                    option = 3;
+                    option = OUT_OPTION;
                     state = OUT;
                 }
                 break;
@@ -165,7 +229,7 @@ int signUp(void) {
                     user tmpUser(tmpDni, tmpName, tmpSur, tmpAge, tmpType, tmpLic, tmpPsw);
                     system("CLS");
                     tmpUser.save();
-                    cout << endl << "Usuario " << tmpUser.name << " registrado! \n" << endl;
+                    cout << endl << "Usuario " << tmpUser.name << " registrado! \n"  << endl << "======================" << endl << endl;
                 }
                 state = OUT;
                 break;

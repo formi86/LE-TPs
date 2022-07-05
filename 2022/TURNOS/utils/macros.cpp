@@ -9,4 +9,7 @@
 #define ALUMNO 1
 #define INSTRUCTOR 2
 #define PILOTO 3
+
+#define OUT_OPTION 4
+
 using namespace std;

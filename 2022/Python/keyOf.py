@@ -1,3 +1,9 @@
+'''
+    Queria probar como funcionaria un keyOf en un diccionario, como no existia, lo hice yo.
+
+'''
+
+
 def keyOf(self, value):
     outputKeys = []
     inputKeys = self.keys()
@@ -5,6 +11,7 @@ def keyOf(self, value):
         if (self[key] == value):
             outputKeys.append(key)
     return outputKeys
+
 
 persona = {
     'age': 17,

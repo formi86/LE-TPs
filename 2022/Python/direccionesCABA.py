@@ -42,8 +42,13 @@ while 1:
     streetB = all[indexB1][indexB2]
 
     if (streetA == streetB):
-        streetB = all[0][indexB2]
+        streetB = all[4][indexB2]
 
-    print(f'Estoy en {streetA} y {streetB} \nDenuevo? y/n ')
+    if (streetB[0] == "I" or (streetB[0] == "H" and streetB[1] == "i")):
+        con = "e"
+    else:
+        con = "y"
+
+    print(f'Estoy en {streetA} {con} {streetB} \nDenuevo? y/n ')
     if (m.getch().decode('ASCII') != 'y'):
         break

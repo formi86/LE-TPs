@@ -27,7 +27,7 @@ def select():
     opt = option.get()
     x = df.get([opt])
     ax.clear()
-    ax.hist(x, bins=20, linewidth=0.1, edgecolor="white")
+    ax.hist(x, bins='auto', linewidth=0.1, edgecolor="white")
     ax.set(xlabel=opt, ylabel='Cantidad en dataset',
            title='Cantidad de cada '+opt)
 
@@ -37,6 +37,7 @@ def select():
 
 # ? Crear TopLevel de tkinter y las variables que va a usar
 top = Toplevel()
+top.geometry("1400x700")
 scale = StringVar(None, "linear")
 option = StringVar(None, "Arrive or Depart")
 

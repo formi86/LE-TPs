@@ -11,5 +11,6 @@
  - Codigo hecho junto a <a href='https://github.com/DHipo'> Bauti</a>, utilizando diccionarios y la funcionalidad de chatear con el vendedor utilizando la API de OpenAi.
 
 
- > ### Entrega Portfolio de Python(<a href='https://github.com/formi86/LE-TPs/tree/main/2022/Python'>/Python</a>)
+ > ### Entrega Portfolio de 6to(<a href='https://github.com/formi86/LE-TPs/tree/main/2022/Python'>/Python</a>)
+ - <a href='https://etrrar-my.sharepoint.com/:b:/g/personal/nformichelli_etrr_edu_ar/ERng-oA0j91BkXn0ABTbcnwB1draj6wurj2fhi5kr8EGvA?e=kkVzBq'>Presentacion en pdf</a>
  

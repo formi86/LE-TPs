@@ -7,6 +7,7 @@
 
 import numpy as np
 import msvcrt as m
+import pandas as pd
 
 # ? Creo llas tuplas con todos los nombres que puedo llegar a usar
 provicias = ('La Pampa', 'Santa Fe', 'Cordoba', 'Mendoza',
@@ -24,13 +25,29 @@ personas = ('Lavalle', 'Figeroa Alcorta', 'Hipolito Yrigoyen', 'Sarmiento', 'Bou
             'Pelegrini', 'Arenales', 'Bolivar', 'San Martin', 'Moreno', 'Belgrano', 'Solis', 'Rodriguez Peña', 'Mitre', 'Azcuenaga', 'Pasteur', 'Viamonte', 'Alsina', 'Lavalle', 'Uriburu', 'Alvear', 'Alberdi', 'Rivadavia', 'Dorrego')
 
 conceptos = ('Saraza', 'Libertad', 'Independencia',
-             'Piedras', 'Juncal', 'Vuelta de Obligado', 'Reconquista', 'Cabildo', 'Esmeralda', 'Constitucion', 'Defensa', 'Av de Mayo', 'Paseo del Bajo')
+             'Piedras', 'Juncal', 'Vuelta de Obligado', 'Reconquista', 'Cabildo', 'Esmeralda', 'Constitucion', 'Defensa', 'Av de Mayo', 'Paseo del Bajo', 'La Via')
 
 all = (provicias, paises, lugares, dias, personas, conceptos)
 
-# ? Hasta que el usuario me diga que no quiere seguir generando nombres de calles no paro
-while 1:
 
+def getRealSt():
+    # ? Leo el dataset con las calles de CABA reales
+    df = pd.read_csv('./datasets/callejero.csv')
+    df.dropna(axis=0)
+    names = df.get(['nom_mapa'])
+    x = np.random.randint(len(names), size=2)
+    indexA = x[0]
+    indexB = x[1]
+    if (indexA == indexB):
+        indexA = round(indexA / 2)
+
+    streetA = str(names.iloc[indexA]['nom_mapa'])
+    streetB = str(names.iloc[indexB]['nom_mapa'])
+    street = (streetA, streetB)
+    return street
+
+
+def getFakeSt():
     x = np.random.randint(500, size=2)
 
     indexA1 = x[0] % 6
@@ -44,11 +61,25 @@ while 1:
     if (streetA == streetB):
         streetB = all[4][indexB2]
 
-    if (streetB[0] == "I" or (streetB[0] == "H" and streetB[1] == "i")):
+    street = (streetA, streetB)
+    return street
+
+
+print(f'Ver calle geteada del dataset o calle geteada de las tuplas? \n1: Dataset\n2: Tuplas\n')
+opt = m.getch().decode('ASCII')
+
+# ? Hasta que el usuario me diga que no quiere seguir generando nombres de calles no paro
+while 1:
+    if (opt == '1'):
+        street = getRealSt()
+    elif (opt == '2'):
+        street = getFakeSt()
+
+    if (street[1][0] == "I" or (street[1][0] == "H" and street[1][1] == "i")):
         con = "e"
     else:
         con = "y"
 
-    print(f'Estoy en {streetA} {con} {streetB} \nDenuevo? y/n ')
+    print(f'Estoy en {street[0]} {con} {street[1]} \nDenuevo? y/n ')
     if (m.getch().decode('ASCII') != 'y'):
         break

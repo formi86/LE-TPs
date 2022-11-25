@@ -16,7 +16,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 fileName = fd.askopenfilename()
 data = pd.read_csv(fileName)
 df = pd.DataFrame(data)
-df.fillna(0)
+df = df.fillna(0)
 columns = df.columns
 
 fig, ax = plt.subplots()
@@ -29,7 +29,7 @@ def select():
     ax.clear()
     ax.hist(x, bins='auto', linewidth=0.1, edgecolor="white")
     ax.set(xlabel=opt, ylabel='Cantidad en dataset',
-           title='Cantidad de cada '+opt)
+           title=f'Cantidad de cada {opt}')
 
     plt.yscale(scale.get())
     canvas.draw()
